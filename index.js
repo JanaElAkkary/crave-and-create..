@@ -23,7 +23,6 @@ const createrecipetable = `CREATE TABLE IF NOT EXISTS recipe (
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 )`
 
-
 server.post('/user/register', (req,res) => {
     let fullname = req.body.fullname;
     let email = req.body.email;
