@@ -3,10 +3,11 @@ const db = new sqlite3.Database('./database.db');
 
 const createusertable =`CREATE TABLE IF NOT EXISTS user (
 id INTEGER PRIMARY KEY AUTOINCREMENT,
-email TEXT NOT NULL,
+email TEXT NOT NULL UNIQUE,
 fullname TEXT NOT NULL,
 phonenumber TEXT NOT NULL,
-password TEXT NOT NULL
+password TEXT NOT NULL,
+created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 )`
 
 const createrecipetable = `CREATE TABLE IF NOT EXISTS recipe (
@@ -38,6 +39,24 @@ const createreviewTable =`CREATE TABLE IF NOT EXISTS reviews (
    review TEXT NOT NULL,
    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
    )`
+   const createUserPreferencesTable = `CREATE TABLE IF NOT EXISTS user_preferences (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    preferences TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES user(id)
+)`;
+const createMealPlanTable = `CREATE TABLE IF NOT EXISTS meal_plan (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    plan_name TEXT NOT NULL,
+    meals JSON NOT NULL, -- JSON array to store meal IDs
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES user(id)
+)`;
+
+
+
 
 
    db.serialize(() => {
