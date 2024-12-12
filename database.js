@@ -54,6 +54,27 @@ const createMealPlanTable = `CREATE TABLE IF NOT EXISTS meal_plan (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES user(id)
 )`;
+const createCommunityRecipesTable = `CREATE TABLE IF NOT EXISTS community_recipes (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    recipe_name TEXT NOT NULL,
+    description TEXT NOT NULL,
+    ingredients TEXT NOT NULL,
+    cooking_time TEXT NOT NULL,
+    difficulty TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES user(id)
+)`;
+const createCommentsTable = `CREATE TABLE IF NOT EXISTS comments (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    recipe_id INTEGER NOT NULL,
+    user_id INTEGER NOT NULL,
+    comment TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (recipe_id) REFERENCES recipe(id),
+    FOREIGN KEY (user_id) REFERENCES user(id)
+)`;
+
 
 
 
