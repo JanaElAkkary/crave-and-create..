@@ -86,6 +86,15 @@ server.post('/cravings', (req, res) => {
     });
 });
 
+// Trending Cravings
+server.get('/trending-cravings', (req, res) => {
+    db.all(`SELECT * FROM trending_cravings ORDER BY popularity DESC LIMIT 10`, [], (err, rows) => {
+        if (err) return res.status(500).send("Error fetching trending cravings: " + err.message);
+        res.send(rows);
+    });
+});
+
+
 
 server.listen(port, ()=> {
     console.log(`the server is listening correctly at port ${port}`);
