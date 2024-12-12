@@ -94,6 +94,20 @@ server.get('/trending-cravings', (req, res) => {
     });
 });
 
+// Meal Plan Creation
+server.post('/meal-plan', (req, res) => {
+    const { userId, planName, meals } = req.body;
+
+    if (!userId || !planName || !meals) {
+        return res.status(400).send("The required fields are: userId, planName, meals");
+    }
+
+    const insertMealPlanQuery = `INSERT INTO meal_plan (user_id, plan_name, meals) VALUES (?, ?, ?)`;
+    db.run(insertMealPlanQuery, [userId, planName, JSON.stringify(meals)], (err) => {
+        if (err) return res.status(500).send("Error creating meal plan: " + err.message);
+        res.send("Meal plan created successfully");
+    });
+});
 
 
 server.listen(port, ()=> {
