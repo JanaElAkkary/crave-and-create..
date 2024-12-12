@@ -5,6 +5,8 @@ const port = 9999;
 
 server.use(express.json());
 
+// User Registration
+
 server.post('/user/register', (req,res) => {
     let fullname = req.body.fullname;
     let email = req.body.email;
@@ -32,7 +34,7 @@ server.post('/user/register', (req,res) => {
 
 
 
-
+// User Login
 
 server.post('/user/login', (req,res) => {
     let email = req.body.email;
@@ -45,7 +47,7 @@ server.post('/user/login', (req,res) => {
 
     const loginquery = `SELECT * FROM user WHERE email = ? AND password = ?`;
     db.get(loginquery, [email, password], (err, row) => {
-        
+
         if (err) return res.status(500).send("Login error: " + err.message);
 
         if (row) {
@@ -57,20 +59,33 @@ server.post('/user/login', (req,res) => {
 
 })
 
+// Craving Search
+server.post('/cravings', (req, res) => {
+    const { keyword, mood, seasonal } = req.body;
+    let query = `SELECT * FROM craving WHERE 1=1`;
+    let params = [];
+
+    if (keyword) {
+        query += ` AND keyword LIKE ?`;
+        params.push(`%${keyword}%`);
+    }
+
+    if (mood) {
+        query += ` AND mood = ?`;
+        params.push(mood);
+    }
+
+    if (seasonal) {
+        query += ` AND seasonal = ?`;
+        params.push(seasonal);
+    }
+
+    db.all(query, params, (err, rows) => {
+        if (err) return res.status(500).send("Error fetching cravings: " + err.message);
+        res.send(rows);
+    });
+});
 
 
 server.listen(port, ()=> {
     console.log(`the server is listening correctly at port ${port}`);
-
-// db.serialize(()=> {
-//     db.run(createUserTable, (Error)=>{
-//         if (Error){
-//             console.error("Usertable creating failed", Error);
-//         }
-//         else{ 
-//         console.log("Usertable creating successful")
-//         }
-
-//     })
-})
-// })
