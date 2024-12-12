@@ -58,6 +58,23 @@ server.post('/user/login', (req,res) => {
     });
 
 })
+// Search Recipes
+server.post('/search', (req, res) => {
+    const { keyword, category } = req.body;
+    let query = `SELECT * FROM recipe WHERE recipename LIKE ? OR description LIKE ?`;
+    let params = [`%${keyword}%`, `%${keyword}%`];
+
+    if (category) {
+        query += ` AND category = ?`;
+        params.push(category);
+    }
+
+    db.all(query, params, (err, rows) => {
+        if (err) return res.status(500).send("Error fetching recipes: " + err.message);
+        res.send(rows);
+    });
+});
+
 
 // Craving Search
 server.post('/cravings', (req, res) => {
@@ -108,6 +125,24 @@ server.post('/meal-plan', (req, res) => {
         res.send("Meal plan created successfully");
     });
 });
+
+// Pantry Search
+server.post('/pantry', (req, res) => {
+    const { ingredients } = req.body;
+
+    if (!ingredients || !Array.isArray(ingredients)) {
+        return res.status(400).send("The required field is: ingredients (array)");
+    }
+
+    const placeholders = ingredients.map(() => '?').join(' OR ingredients LIKE ');
+    const query = `SELECT * FROM recipe WHERE ingredients LIKE ${placeholders}`;
+    const params = ingredients.map(ingredient => `%${ingredient}%`);
+
+    db.all(query, params, (err, rows) => {
+        if (err) return res.status(500).send("Error fetching pantry recipes: " + err.message);
+        res.send(rows);
+    });
+})
 
 
 server.listen(port, ()=> {
