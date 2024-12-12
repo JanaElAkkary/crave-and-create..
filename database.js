@@ -75,6 +75,14 @@ const createCommentsTable = `CREATE TABLE IF NOT EXISTS comments (
     FOREIGN KEY (user_id) REFERENCES user(id)
 )`;
 
+const createPantryTable = `CREATE TABLE IF NOT EXISTS pantry (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    ingredient_name TEXT NOT NULL,
+    quantity TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES user(id)
+)`;
 
 
 
