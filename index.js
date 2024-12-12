@@ -10,7 +10,6 @@ server.use(express.json());
 server.post('/user/register', (req,res) => {
     let fullname = req.body.fullname;
     let email = req.body.email;
-    // let phonenumber= parseInt(req.body.phonenumber,10);
     let phonenumber = req.body.phonenumber;
     let password = req.body.password;
 
@@ -58,6 +57,7 @@ server.post('/user/login', (req,res) => {
     });
 
 })
+
 // Search Recipes
 server.post('/search', (req, res) => {
     const { keyword, category } = req.body;
@@ -75,6 +75,42 @@ server.post('/search', (req, res) => {
     });
 });
 
+// Retrieve Recipe Details
+server.get('/recipes/:id', (req, res) => {
+    const { id } = req.params;
+    db.get(`SELECT * FROM recipe WHERE id = ?`, [id], (err, row) => {
+        if (err) return res.status(500).send("Error fetching recipe: " + err.message);
+        if (!row) return res.status(404).send("Recipe not found");
+        res.send(row);
+    });
+});
+
+// Add a Recipe Review
+server.post('/recipes/:id/review', (req, res) => {
+    const { id } = req.params;
+    const { userId, review } = req.body;
+
+    if (!userId || !review) {
+        return res.status(400).send("The required fields are: userId, review");
+    }
+
+    const insertReviewQuery = `INSERT INTO reviews (recipe_id, user_id, review) VALUES (?, ?, ?)`;
+    db.run(insertReviewQuery, [id, userId, review], (err) => {
+        if (err) return res.status(500).send("Error adding review: " + err.message);
+        res.send("Review added successfully");
+    });
+});
+
+// Retrieve Reviews for a Recipe
+server.get('/recipes/:id/reviews', (req, res) => {
+    const { id } = req.params;
+
+    const getReviewsQuery = `SELECT * FROM reviews WHERE recipe_id = ?`;
+    db.all(getReviewsQuery, [id], (err, rows) => {
+        if (err) return res.status(500).send("Error fetching reviews: " + err.message);
+        res.send(rows);
+    });
+});
 
 // Craving Search
 server.post('/cravings', (req, res) => {
@@ -126,6 +162,17 @@ server.post('/meal-plan', (req, res) => {
     });
 });
 
+// Retrieve Meal Plan
+server.get('/meal-plan/:id', (req, res) => {
+    const { id } = req.params;
+
+    db.get(`SELECT * FROM meal_plan WHERE id = ?`, [id], (err, row) => {
+        if (err) return res.status(500).send("Error fetching meal plan: " + err.message);
+        if (!row) return res.status(404).send("Meal plan not found");
+        res.send({ ...row, meals: JSON.parse(row.meals) });
+    });
+});
+
 // Pantry Search
 server.post('/pantry', (req, res) => {
     const { ingredients } = req.body;
@@ -147,3 +194,4 @@ server.post('/pantry', (req, res) => {
 
 server.listen(port, ()=> {
     console.log(`the server is listening correctly at port ${port}`);
+});

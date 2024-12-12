@@ -2,12 +2,12 @@ const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database('./database.db');
 
 const createusertable =`CREATE TABLE IF NOT EXISTS user (
-id INTEGER PRIMARY KEY AUTOINCREMENT,
-email TEXT NOT NULL UNIQUE,
-fullname TEXT NOT NULL,
-phonenumber TEXT NOT NULL,
-password TEXT NOT NULL,
-created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    email TEXT NOT NULL UNIQUE,
+    fullname TEXT NOT NULL,
+    phonenumber TEXT NOT NULL,
+    password TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 )`
 
 const createrecipetable = `CREATE TABLE IF NOT EXISTS recipe (
