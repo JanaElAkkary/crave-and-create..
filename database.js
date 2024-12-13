@@ -17,11 +17,11 @@ const createrecipetable = `CREATE TABLE IF NOT EXISTS recipe (
     ingredients TEXT NOT NULL,
     timetoprepare TEXT NOT NULL,
     dietary_details TEXT NOT NULL,
-    catgory TEXT NOT NULL,
+    category TEXT NOT NULL,
     flavor_profile TEXT NOT NULL,
     cooking_time TEXT NOT NULL,
     difficulty TEXT NOT NULL,
-    user_id TEXT NOT NULL,
+    user_id INTEGER NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 )`
@@ -34,8 +34,8 @@ const createcravingtable =`CREATE TABLE IF NOT EXISTS craving (
 )`
 const createreviewTable =`CREATE TABLE IF NOT EXISTS reviews (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-   recipe_id TEXT NOT NULL,
-   user_id TEXT NOT NULL,
+   recipe_id INTEGER NOT NULL,
+   user_id INTEGER NOT NULL,
    review TEXT NOT NULL,
    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
    )`
@@ -107,6 +107,31 @@ const createPantryTable = `CREATE TABLE IF NOT EXISTS pantry (
     db.run(createreviewTable, (err) => {
         if (err) console.error("Review table creating failed", err.message);
         else console.log("Review table created successfully");
+    });
+
+    db.run(createUserPreferencesTable, (err) => {
+        if (err) console.error("User preferences table creating failed", err.message);
+        else console.log("User preferences table created successfully");
+    });
+
+    db.run(createMealPlanTable, (err) => {
+        if (err) console.error("Meal plan table creating failed", err.message);
+        else console.log("Meal plan table created successfully");
+    });
+
+    db.run(createCommunityRecipesTable, (err) => {
+        if (err) console.error("Community recipes table creating failed", err.message);
+        else console.log("Community recipes table created successfully");
+    });
+
+    db.run(createCommentsTable, (err) => {
+        if (err) console.error("Comments table creating failed", err.message);
+        else console.log("Comments table created successfully");
+    });
+
+    db.run(createPantryTable, (err) => {
+        if (err) console.error("Pantry table creating failed", err.message);
+        else console.log("Pantry table created successfully");
     });
 });
 
