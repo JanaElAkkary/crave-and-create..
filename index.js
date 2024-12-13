@@ -66,7 +66,7 @@ server.post('/recipe/add', (req, res) => {
         ingredients,
         timetoprepare,
         dietary_details,
-        catgory,
+        category,
         flavor_profile,
         cooking_time,
         difficulty,
@@ -80,7 +80,7 @@ server.post('/recipe/add', (req, res) => {
         !ingredients ||
         !timetoprepare ||
         !dietary_details ||
-        !catgory ||
+        !category ||
         !flavor_profile ||
         !cooking_time ||
         !difficulty ||
@@ -99,7 +99,7 @@ server.post('/recipe/add', (req, res) => {
             ingredients,
             timetoprepare,
             dietary_details,
-            catgory,
+            category,
             flavor_profile,
             cooking_time,
             difficulty,
@@ -117,7 +117,7 @@ server.post('/recipe/add', (req, res) => {
             ingredients,
             timetoprepare,
             dietary_details,
-            catgory,
+            category,
             flavor_profile,
             cooking_time,
             difficulty,
